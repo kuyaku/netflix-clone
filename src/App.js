@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { useEffect } from "react";
+import Authentication from "./components/Authentication";
+import Browser from "./components/Browser";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./utils/firebase";
+import { useDispatch } from "react-redux";
+import { addUser } from "./utils/userSlice";
 
-function App() {
+const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // user is signed in
+        const { uid, email, displayName, photoURL } = user;
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayName: displayName,
+            photoURL: photoURL,
+          })
+        );
+        // here navigate would make problem, since we are using it before making router, so use in login page, where you login.
+        // take the user to browse page, using useNavigate hook
+      } else {
+        // user is signed out
+        dispatch(addUser());
+      }
+    });
+  }, []);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Authentication />,
+    },
+    {
+      path: "/browse",
+      element: <Browser />,
+    },
+  ]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <RouterProvider router={router} />
     </div>
   );
-}
+};
 
 export default App;
