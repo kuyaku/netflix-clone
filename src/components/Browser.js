@@ -1,19 +1,22 @@
 import Header2 from "./Header2";
-import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useNowPlayingMovies } from "../hooks/useNowPlayingMovies";
+import BrowsePageWrapper from "./BrowsePage/BrowsePageWrapper";
+import { useSelector } from "react-redux";
+import MovieMoreInfo from "./BrowsePage/MovieMoreInfo";
 
 const Browser = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!auth.currentUser) {
-      navigate("/");
-    }
-  }, []);
+  useNowPlayingMovies();
+  const showMovieInfo = useSelector((store) => store.movies.showMovieInfo);
+  console.log(showMovieInfo);
   return (
-    <div className="">
+    <div className="flex flex-col bg-black">
+      {showMovieInfo && (
+        <div className="text-white flex justify-center absolute top-0 w-full h-full bg-black bg-opacity-60 z-50 p-10 pt-14">
+          <MovieMoreInfo showMovieInfo={showMovieInfo} />
+        </div>
+      )}
       <Header2 />
-      <div className="w-[120px] h-[120px] flex bg-yellow-200 sm:bg-green-200 md:bg-red-200 lg:bg-blue-200"></div>
+      <BrowsePageWrapper />
     </div>
   );
 };

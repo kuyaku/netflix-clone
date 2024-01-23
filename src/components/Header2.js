@@ -26,7 +26,7 @@ const Header2 = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
-  console.log(user);
+  // console.log(user);
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {
@@ -40,8 +40,8 @@ const Header2 = () => {
   };
 
   return (
-    <div className="w-full px-4 flex justify-between relative bg-black">
-      <div className="border border-black flex gap-2 flex-1 h-12 sm:h-14">
+    <div className="bg-black bg-opacity-95 w-full px-4 flex justify-between fixed z-40 md:py-3 border-b border-gray-700">
+      <div className="flex gap-2 flex-1 h-12 sm:h-14">
         <Menu
           onClick={() => setShowSidebar(!showSidebar)}
           className="text-white w-8 h-full my-auto sm:hidden"
@@ -66,7 +66,7 @@ const Header2 = () => {
       </div>
       <div className="flex items-center gap-1 w-[100px] sm:w-[300px] lg:w-fit mr-2">
         <input
-          className="bg-inherit my-auto border border-gray-500 w-full h-7 p-2 rounded-sm lg:hidden"
+          className="bg-inherit my-auto  w-full h-7 p-2 rounded-sm lg:hidden"
           type="text"
           placeholder="Search..."
         />
